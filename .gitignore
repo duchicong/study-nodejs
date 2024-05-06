@@ -1,3 +1,7 @@
 # packages
 node_modules
 package-*.json
+
+# environment
+.env
+.env.*
