@@ -4,4 +4,3 @@ package-*.json
 
 # environment
 .env
-.env.*
