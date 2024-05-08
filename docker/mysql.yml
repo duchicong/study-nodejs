@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  db:
+    # platform: linux/arm64
+    # image: mysql:5.7
+    image: arm64v8/mysql
+    restart: always
+    environment:
+      - MYSQL_DATABASE=nodejs_mysql
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3307:3306"
