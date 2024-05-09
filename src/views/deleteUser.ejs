@@ -21,7 +21,7 @@
                 <a class="nav-link" href="/add-user">Add User</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/update-user">Update User</a>
+                <a class="nav-link" href="#">Pricing</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link disabled" aria-disabled="true">Disabled</a>
@@ -31,35 +31,10 @@
         </div>
     </nav>
     <div class="container">
-        <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Username</th>
-                <th scope="col">Email</th>
-                <th scope="col">City</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-                <% users.forEach(function(user) { %>
-                    <tr>
-                        <td scope="row"><%= user.id %></td>
-                        <td scope="row"><%= user?.email || '-' %></td>
-                        <td scope="row"><%= user?.name || '-' %></td>
-                        <td scope="row"><%= user?.city || '-' %></td>
-                        <td>
-                            <div class="d-flex">
-                              <a href="/update-user/<%= user.id %>" class="btn btn-warning">Edit</a>
-                              <form action="/delete-user/<%= user.id %>" method="GET">
-                                <button class="btn btn-danger">Delete</button>
-                              </form>
-                            </div>
-                        </td>
-                    </tr>
-                <% }) %>
-            </tbody>
-          </table>
+        <form action="/delete-user/<%= user?.id %>" method="POST">
+            <p>You are want to delete "<%= user?.name %>"</p>
+            <button type="submit">Sure</button>
+        </form>
     </div>
 </body>
 </html>
