@@ -2,11 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const configViewEngine = require('./config/viewEngine');
 const webRoutes = require('./router/web');
-const connection = require('./config/database');
 const env = require('./config/env');
+const morgan = require('morgan');
+const apisRoutes = require('./router/api');
 
 const app = express()
 const port = env.PORT;
+
+app.use(morgan('combined'))
 
 // config template engine
 configViewEngine(app, __dirname);
@@ -25,6 +28,7 @@ app.use(express.urlencoded({ extended: true }))
 
 // init routes
 app.use('/', webRoutes);
+app.use('/api/v1/', apisRoutes);
 
 // handle not found
 app.use((req, res) => {
@@ -32,15 +36,6 @@ app.use((req, res) => {
 })
 
 // app.use(express.urlencoded({ extended: true }))
-
-// A simple SELECT query
-// connection.query(
-//   'SELECT * FROM Users',
-//   function (err, results, fields) {
-//     console.log(results); // results contains rows returned by server
-//     console.log(fields); // fields contains extra meta data about results, if available
-//   }
-// );
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

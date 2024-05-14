@@ -1,6 +1,13 @@
 const connection = require('../config/database');
 const { getUserById, updateUserById, deleteUserById } = require("../service/crud.service")
-const { uploadAvatar } = require('../service/upload.service');
+
+const getUsers = async (req, res) => {
+    const [rows] = await connection.execute('SELECT * from Users');
+    return res.status(200).json({
+        message: 'ok',
+        data: rows
+    });
+}
 
 /**
  * @method GET
@@ -105,5 +112,6 @@ module.exports = {
     updateUser,
     getDeleteUser,
     deleteUser,
-    getDetailUser
+    getDetailUser,
+    getUsers
 }
