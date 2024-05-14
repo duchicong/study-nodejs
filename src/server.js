@@ -26,6 +26,11 @@ app.use(express.urlencoded({ extended: true }))
 // init routes
 app.use('/', webRoutes);
 
+// handle not found
+app.use((req, res) => {
+  res.render('404.ejs')
+})
+
 // app.use(express.urlencoded({ extended: true }))
 
 // A simple SELECT query

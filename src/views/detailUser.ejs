@@ -21,7 +21,7 @@
                 <a class="nav-link" href="/add-user">Add User</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
+                <a class="nav-link" href="/update-user">Update User</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link disabled" aria-disabled="true">Disabled</a>
@@ -31,25 +31,12 @@
         </div>
     </nav>
     <div class="container">
-        <form action="/add-user" method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="formFile" class="form-label">Default file input example</label>
-                <input class="form-control" type="file" id="formFile" name="avatar">
-            </div>
-            <div class="mb-3">
-              <label for="username" class="form-label">Username</label>
-              <input type="text" class="form-control" id="username" name="name">
-            </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" name="email">
-            </div>
-            <div class="mb-3">
-                <label for="address" class="form-label">Address</label>
-                <input type="text" class="form-control" id="address" name="city">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+      <% if (user.avatar) { %>
+        <img src="/uploaded/avatar/<%= user.avatar %>" alt="<%= user.name %>" class="rounded" style="max-width: 200px; width: auto;">
+      <% } %>
+      <p>User name: <%= user.name || "-" %></p>
+      <p>Email: <%= user.email || "-" %></p>
+      <p>City: <%= user.city || '-' %></p>
     </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 const connection = require('../config/database');
 const { getUserById, updateUserById, deleteUserById } = require("../service/crud.service")
+const { uploadAvatar } = require('../service/upload.service');
 
 /**
  * @method GET
@@ -9,6 +10,12 @@ const getAddUser = (_, res) => {
     res.render('addUser.ejs')
 }
 
+const getDetailUser = async (req, res) => {
+    const { id } = req.params;
+    const user = await getUserById(id);
+    res.render('detailUser.ejs', { user })
+}
+
 /**
  * @method GET
  * @description get page add user
@@ -16,6 +23,8 @@ const getAddUser = (_, res) => {
 const getUpdateUser = async (req, res) => {
     const { id } = req.params;
     const user = await getUserById(id);
+
+    console.log('root path ', );
     res.render('editUser.ejs', { user })
 }
 
@@ -36,10 +45,15 @@ const getDeleteUser = async (req, res) => {
 const addUser = async (req, res) => {
     const { name, email, city } = req.body;
 
+    let fileName = '';
+    if (req.file?.filename) {
+        fileName = req.file?.filename;
+    }
+
     try {
         const [rows] = await connection.query(
-            `INSERT INTO Users (email, name, city) VALUES(?, ?, ?)`,
-            [email, name, city],
+            `INSERT INTO Users (email, name, city, avatar) VALUES(?, ?, ?, ?)`,
+            [email, name, city, fileName],
         )
         if (!rows) return res.send('Error add user')
         return res.send('Created user successfully!')
@@ -55,8 +69,13 @@ const addUser = async (req, res) => {
 const updateUser = async (req, res) => {
     const { id, name, email, city } = req.body;
 
+    let avatar = '';
+    if (req.file?.filename) {
+        avatar = req.file?.filename;
+    }
+
     try {
-        const [result] = await updateUserById(id, { name, email, city })
+        const [result] = await updateUserById(id, { name, email, city, avatar })
         if (!result.affectedRows) return res.send('Error add user')
         return res.redirect('/')
     } catch (err) {
@@ -85,5 +104,6 @@ module.exports = {
     getUpdateUser,
     updateUser,
     getDeleteUser,
-    deleteUser
+    deleteUser,
+    getDetailUser
 }

@@ -23,11 +23,11 @@ const getUserById = async (id) => {
 }
 
 const updateUserById = async (id, data) => {
-    const { name, email, city } = data;
+    const { name, email, city, avatar } = data;
     try {
         const data = await connection.query(
-            `UPDATE Users SET email = ?, name = ?, city = ? WHERE id = ?`,
-            [email, name, city, id],
+            `UPDATE Users SET email = ?, name = ?, city = ?, avatar = ? WHERE id = ?`,
+            [email, name, city, avatar, id],
         )
         return data;
     } catch (err) {

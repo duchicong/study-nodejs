@@ -50,6 +50,7 @@
                         <td scope="row"><%= user?.city || '-' %></td>
                         <td>
                             <div class="d-flex">
+                              <a href="/user/<%= user.id %>" class="btn btn-info">Detail</a>
                               <a href="/update-user/<%= user.id %>" class="btn btn-warning">Edit</a>
                               <form action="/delete-user/<%= user.id %>" method="GET">
                                 <button class="btn btn-danger">Delete</button>
