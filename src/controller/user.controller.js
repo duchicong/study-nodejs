@@ -1,11 +1,23 @@
 const connection = require('../config/database');
 const { getUserById, updateUserById, deleteUserById } = require("../service/crud.service")
+const { paginate } = require('../utils/paginate');
 
 const getUsers = async (req, res) => {
-    const [rows] = await connection.execute('SELECT * from Users');
+    const [rows, fields] = await connection.execute('SELECT * from Users');
+
+    const { rows: data, ...rest } = paginate(rows, {
+        currentPage: parseInt(req.query?.page),
+        size: parseInt(req.query?.size)
+    })
+
+    console.log('fields ', fields)
+    // Send the paginated products and total pages as the API response
     return res.status(200).json({
         message: 'ok',
-        data: rows
+        data,
+        pagination: {
+            ...rest
+        }
     });
 }
 
