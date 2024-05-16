@@ -5,7 +5,8 @@
     "database": "nodejs_mysql",
     "port": "3307",
     "host": "localhost",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": false
   },
   "test": {
     "username": "root",

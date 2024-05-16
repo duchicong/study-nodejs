@@ -1,25 +1,21 @@
-const mysql = require('mysql2/promise');
+const { Sequelize } = require('sequelize');
 const env = require('./env');
 
-// Create the connection to database
-// const connection = mysql.createConnection({
-//     host: env.DB_HOST,
-//     user: env.DB_USER,
-//     password: env.DB_PASSWORD,
-//     port: env.DB_PORT,
-//     database: env.DB_NAME,
-// });
-
-// connection database with pooling
-const connection = mysql.createPool({
-    host: env.DB_HOST,
-    user: env.DB_USER,
-    password: env.DB_PASSWORD,
-    port: env.DB_PORT,
-    database: env.DB_NAME,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+// Option 3: Passing parameters separately (other dialects)
+const sequelize = new Sequelize(env.DB_NAME, env.DB_USER, env.DB_PASSWORD, {
+  host: env.DB_HOST,
+  dialect: env.DIALECT,
+  port: env.DB_PORT,
+  logging: false
 });
 
-module.exports = connection;
+const connectDB = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+      } catch (error) {
+        console.error('Unable to connect to the database:', error);
+      }
+}
+
+module.exports = connectDB;

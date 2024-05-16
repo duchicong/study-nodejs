@@ -5,6 +5,7 @@ const webRoutes = require('./router/web');
 const env = require('./config/env');
 const morgan = require('morgan');
 const apisRoutes = require('./router/api');
+const connectDB = require('./config/database')
 
 const app = express()
 const port = env.PORT;
@@ -35,6 +36,7 @@ app.use((req, res) => {
   res.render('404.ejs')
 })
 
+connectDB();
 // app.use(express.urlencoded({ extended: true }))
 
 app.listen(port, () => {
