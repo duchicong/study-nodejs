@@ -6,11 +6,15 @@ const env = require('./config/env');
 const morgan = require('morgan');
 const apisRoutes = require('./router/api');
 const connectDB = require('./config/database')
+const cors = require('cors');
 
 const app = express()
 const port = env.PORT;
 
 app.use(morgan('combined'))
+
+// config cors
+app.use(cors())
 
 // config template engine
 configViewEngine(app, __dirname);
