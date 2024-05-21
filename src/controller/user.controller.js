@@ -1,24 +1,29 @@
 const connection = require('../config/database');
-const { getUserById, updateUserById, deleteUserById } = require("../service/crud.service")
+// const { getUserById, updateUserById, deleteUserById } = require("../service/crud.service")
+const { createNewUser, getAllUsers, getUserById, updateUserData, deleteUserById, handleUserLogin } = require('../service/user.service');
 const { paginate } = require('../utils/paginate');
 
 const getUsers = async (req, res) => {
-    const [rows, fields] = await connection.execute('SELECT * from Users');
-
-    const { rows: data, ...rest } = paginate(rows, {
-        currentPage: parseInt(req.query?.page),
-        size: parseInt(req.query?.size)
-    })
-
-    console.log('fields ', fields)
+    const data = await getAllUsers();
     // Send the paginated products and total pages as the API response
     return res.status(200).json({
         message: 'ok',
-        data,
-        pagination: {
-            ...rest
-        }
+        data
     });
+}
+
+const getUserDetail = async (req, res) => {
+    try {
+        const data = await getUserById(req.params?.id)
+
+        return res.status(200).json({
+            message: 'ok',
+            data
+        })
+    } catch (err) {
+        console.log('loi ', err)
+        return res.status(404).json(err);
+    }
 }
 
 /**
@@ -62,31 +67,20 @@ const getDeleteUser = async (req, res) => {
  * @description add user
 */
 const addUser = async (req, res) => {
-    const { name, email, city } = req.body;
-
-    let fileName = '';
-    if (req.file?.filename) {
-        fileName = req.file?.filename;
-    }
-
     try {
-        const [rows] = await connection.query(
-            `INSERT INTO Users (email, name, city, avatar) VALUES(?, ?, ?, ?)`,
-            [email, name, city, fileName],
-        )
-        if (!rows) return res.send('Error add user')
-        return res.send('Created user successfully!')
+        const result = await createNewUser(req.body);
+        return res.status(200).json(result);
     } catch (err) {
-        return res.send('Error add user')
+        return res.status(400).json({ status_code: 'create_user_failed' });
     }
 }
 
 /**
- * @method POST
+ * @method PUT
  * @description update user
 */
 const updateUser = async (req, res) => {
-    const { id, name, email, city } = req.body;
+    const data = req.body;
 
     let avatar = '';
     if (req.file?.filename) {
@@ -94,27 +88,44 @@ const updateUser = async (req, res) => {
     }
 
     try {
-        const [result] = await updateUserById(id, { name, email, city, avatar })
-        if (!result.affectedRows) return res.send('Error add user')
-        return res.redirect('/')
+        const result = await updateUserData(data);
+        if (!result) throw new Error('update_failed')
+        return res.status(200).json({ message: 'ok' })
     } catch (err) {
-        return res.send('Error add user')
+        return res.status(400).json({ ...err })
+    }
+}
+
+/**
+ * @method DELETE
+ * @description delete user
+*/
+const deleteUser = async (req, res) => {
+    const { id } = req.params;
+    const role = req.body.role;
+
+    try {
+        const result = await deleteUserById(id, role);
+        res.status(200).json({ message: 'ok', data: result })
+    } catch (err) {
+        return res.send('Error delete user')
     }
 }
 
 /**
  * @method POST
- * @description delete user
+ * @description authenticate
 */
-const deleteUser = async (req, res) => {
-    const { id } = req.params;
-    try {
-        const [result] = await deleteUserById(id);
-        if (!result.affectedRows) return res.send('Error add user')
-        return res.redirect('/')
-    } catch (err) {
-        return res.send('Error add user')
+const userLogin = async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({
+            message: 'Form data not has email and password',
+            error_code: 'invalid'
+        })
     }
+    const data = await handleUserLogin(email, password)
+    res.status(200).json({ data })
 }
 
 module.exports = {
@@ -125,5 +136,7 @@ module.exports = {
     getDeleteUser,
     deleteUser,
     getDetailUser,
-    getUsers
+    getUsers,
+    getUserDetail,
+    userLogin
 }

@@ -1,6 +1,10 @@
 # packages
 node_modules
+
+# logs version packages
 package-*.json
+yarn.lock
+
 
 # environment
 .env
