@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const apisRoutes = require('./router/api');
 const connectDB = require('./config/database')
 const cors = require('cors');
+const { setHeaderResponse } = require('./middleware/headers.middleware');
 
 const app = express()
 const port = env.PORT;
@@ -14,7 +15,8 @@ const port = env.PORT;
 app.use(morgan('combined'))
 
 // config cors
-app.use(cors())
+// app.use(cors({ }))
+app.use(setHeaderResponse)
 
 // config template engine
 configViewEngine(app, __dirname);
