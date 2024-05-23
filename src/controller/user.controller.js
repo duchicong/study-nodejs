@@ -1,7 +1,4 @@
-const connection = require('../config/database');
-// const { getUserById, updateUserById, deleteUserById } = require("../service/crud.service")
 const { createNewUser, getAllUsers, getUserById, updateUserData, deleteUserById, handleUserLogin } = require('../service/user.service');
-const { paginate } = require('../utils/paginate');
 
 const getUsers = async (req, res) => {
     const data = await getAllUsers();

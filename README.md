@@ -24,7 +24,7 @@ Run Migration DB
 npx sequelize-cli db:migrate
 ```
 
-Run seeder data
+Run seeder generator insert data
 
 ```
 npx sequelize-cli seed:generate --name "users" --models-path "./model/users.js"
